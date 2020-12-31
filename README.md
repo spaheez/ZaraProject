@@ -10,7 +10,9 @@ Steps to run this project:
 
 
 sudo mysql -h localhost -u root -ppassword test
-select * from item_emails_email
+SHOW TABLES;
+select * from item_emails_email;
+select * from email;
 
 
 how to start backend:
@@ -23,4 +25,4 @@ chrome.extension.getBackgroundPage().console.log('foo');
 git status
 
 cd /IdeaProjects/ZaraProject
-cd (go back to home directory
+cd (go back to home directory)
