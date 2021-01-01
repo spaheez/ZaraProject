@@ -4,12 +4,17 @@ function submitData() {
         const item_url = tabs[0].url;
 
         chrome.identity.getProfileUserInfo(function (userInfo) {
-        const email = JSON.stringify(userInfo);
-            if (email == null) {chrome.pageAction.setPopup({popup: "error.html"})}
+            const email = userInfo.email
+            chrome.extension.getBackgroundPage().console.log(email);
+            if (email === "") {
+                chrome.tabs.getSelected(null, _ => alert("You are not logged in to Chrome. " +
+                    "Please log in before submitting your item to Saley."))
+                return
+            }
 
             let data = {
                 email: email,
-                item_url: item_url,
+                item_url: item_url
             }
 
             fetch("http://127.0.0.1:3000", {
