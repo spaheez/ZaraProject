@@ -7,7 +7,7 @@ export class Item{
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column("decimal")
+    @Column("integer")
     price: number;
 
     @Column("text")

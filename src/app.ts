@@ -2,10 +2,13 @@ import 'reflect-metadata';
 import {createConnection} from "typeorm";
 import * as express from "express";
 import {Request, Response} from "express";
-import * as bodyParser from  "body-parser";
+import * as bodyParser from "body-parser";
 import {Item} from "./entity/Item";
 import {Email} from "./entity/Email";
 import {scrapeZara} from "./scraper";
+
+let cron = require('node-cron');
+const nodemailer = require('nodemailer');
 
 
 createConnection({"type": "mysql",
@@ -17,22 +20,31 @@ createConnection({"type": "mysql",
     "synchronize": true,
     "logging": false,
     "entities": ["src/entity/**/*.ts"]
-}).then(connection => {
+}).then(async connection => {
     const itemRepository = connection.getRepository(Item);
     const emailRepository = connection.getRepository(Email)
 
     const save = async (price: number, url: string, emailAddress: string) => {
-        let item = new Item();
-        item.price = price;
-        item.url = url;
-        let savedItem = await itemRepository.save(item)
+        let existingItem = await itemRepository.findOne({url: url});
+        if (existingItem === undefined) {
+            const item = new Item();
+            item.price = price;
+            item.url = url;
+            existingItem = await itemRepository.save(item)
+        }
 
-        let email = new Email();
-        email.address = emailAddress;
-        email.items = [savedItem]
+        let existingEmail = await emailRepository.findOne({address: emailAddress}, {relations: ['items']});
+        if (existingEmail === undefined) {
+            const email = new Email();
+            email.address = emailAddress;
+            email.items = []
+            existingEmail = email
+        }
 
-        await emailRepository.save(email)
-
+        if (existingEmail.items.includes(existingItem)) return
+        existingEmail.items.push(existingItem)
+        await emailRepository.save(existingEmail)
+        
         return getAllItems();
     };
 
@@ -58,14 +70,53 @@ createConnection({"type": "mysql",
         const items = await save(firstPrice, url, email)
         res.send(items);
 
+    })
 
-    //     console.log(firstPrice)
-    //     let newprice = 100
-    //     if (newprice < firstPrice) {
-    //         console.log("it worked");
-    //     }
-    // })
 
+    cron.schedule('*/20 * * * * *', async () => {
+        console.log("running cron")
+        const itemSet = await itemRepository.find({ select: ["id", "url", "price"], relations: ["emails"] });
+
+        for (let i=0; i < itemSet.length; i++) {
+            const item = itemSet[i];
+            let itemUrl = item.url;
+            let str = "Zara item"
+            let result = str.link(itemUrl)
+
+            let oldPrice = item.price;
+            // let newPrice = await scrapeZara(itemUrl);
+            let newPrice = 1
+            let userEmails = item.emails;
+
+            if (newPrice < oldPrice) {
+                console.log(`${item.url} is on sale`)
+                let transport = nodemailer.createTransport({
+                    service: 'gmail',
+                    auth: {
+                        user: 'saley.extension@gmail.com',
+                        pass: 'Saleyextension1'
+                    }
+                });
+                const message = {
+                    from: 'marta.spahija@gmail.com',
+                    to: userEmails,
+                    subject: 'Zara item went on sale!',
+                    html: '<h1> Your Zara item is on sale! </h1><p> The item you were tracking just went on sale! Click on the link to access it: '+result+' </p>'
+                };
+
+                transport.sendMail(message, function(err, result) {
+                    if (err) {
+                        console.log(`error: ${err}`)
+                    } else {
+                        console.log(`result: ${result}`);
+                    }
+                });
+
+                console.log(`${item.url} email got sent`)
+
+                await itemRepository.update(item.id, {price: newPrice});
+            }
+        }
     })
 
     app.listen(3000);

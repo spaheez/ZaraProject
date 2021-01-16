@@ -11,7 +11,7 @@ body{
     text-align: center;
     font-weight: bolder;
     font-size: 40px;
-    color: hsl(350, 84%, 71%);
+    color: hsl(351, 44%, 60%);
     border-style: double;
     padding: 5px;
     margin-top: 10px;
@@ -20,11 +20,11 @@ body{
 .container label{
     text-align: center;
     font-size: 16px;
-    color: hsl(349, 64%, 61%);
+    color: hsl(350, 49%, 57%);
 }
 
 .container button{
-    background-color: hsl(350, 84%, 71%);
+    background-color: hsl(350, 39%, 55%);
     color: white;
     font-weight: bold;
     padding:8px 15px;
