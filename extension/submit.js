@@ -5,7 +5,7 @@ function submitData() {
 
         chrome.identity.getProfileUserInfo(function (userInfo) {
             const email = userInfo.email
-            chrome.extension.getBackgroundPage().console.log(email);
+            // chrome.extension.getBackgroundPage().console.log(email);
             if (email === "") {
                 chrome.tabs.getSelected(null, _ => alert("You are not logged in to Chrome. " +
                     "Please log in before submitting your item to Saley."))

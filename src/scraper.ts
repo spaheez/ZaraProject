@@ -30,8 +30,13 @@ export async function scrapeZara(url) {
     const page = await browser.newPage();
     await page.goto(url);
 
-    const [el] = await page.$x('//*[@id="product"]/div[1]/div/div[2]/div[1]/span');
-    const txt = await el.getProperty('textContent');
+    let priceElement
+    const [salePriceElement] = await page.$x('//*[@id="product"]/div[1]/div/div[2]/div[1]/span[2]');
+    if (salePriceElement) priceElement = salePriceElement
+    else [priceElement] = await page.$x('//*[@id="product"]/div[1]/div/div[2]/div[1]/span');
+
+    if (priceElement){
+    const txt = await priceElement.getProperty('textContent');
     const fullPrice = await txt.jsonValue();
 
     let numberPrice = fullPrice.replace(/[^0-9.,]/g,"");
@@ -49,11 +54,7 @@ export async function scrapeZara(url) {
 
     browser.close();
     return finalPrice;
+} else {
+        console.log("error");
+    }
 }
-
-
-
-
-
-
-

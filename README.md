@@ -26,3 +26,4 @@ git status
 
 cd /IdeaProjects/ZaraProject
 cd (go back to home directory)
+
