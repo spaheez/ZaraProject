@@ -83,9 +83,9 @@ createConnection({"type": "mysql",
             let str = "Zara item"
             let result = str.link(itemUrl)
 
-
             let oldPrice = item.price;
-            let newPrice = await scrapeZara(itemUrl);
+            // let newPrice = await scrapeZara(itemUrl);
+            let newPrice = 1
             let userEmails = item.emails;
 
             if (newPrice < oldPrice) {
@@ -93,8 +93,8 @@ createConnection({"type": "mysql",
                 let transport = nodemailer.createTransport({
                     service: 'gmail',
                     auth: {
-                        user: 'marta.spahija@gmail.com',
-                        pass: 'password'
+                        user: 'saley.extension@gmail.com',
+                        pass: 'Saleyextension1'
                     }
                 });
                 const message = {

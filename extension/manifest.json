@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "description": "This extension sends you an email when your Zara item goes on sale!",
   "manifest_version": 2,
-  "icons":{"512":"shirt.png"},
+  "icons":{"512":"logo.png"},
 
   "background": {"scripts":["background.js"],
     "persistent":false},
 
   "page_action":{
-    "default_icon":"shirt.png",
+    "default_icon":"logo.png",
     "default_title":"Saley",
     "default_popup": "popup.html"
   },
