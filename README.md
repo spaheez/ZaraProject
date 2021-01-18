@@ -7,8 +7,6 @@ Steps to run this project:
 3. Run `npm start` command
 
 
-
-
 sudo mysql -h localhost -u root -ppassword test
 SHOW TABLES;
 select * from item_emails_email;
@@ -24,7 +22,7 @@ chrome.extension.getBackgroundPage().console.log('foo');
 
 git status
 
-cd /IdeaProjects/ZaraProject
+cd ~/IdeaProjects/ZaraProject
 cd (go back to home directory)
 
 

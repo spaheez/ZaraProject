@@ -1,26 +1,32 @@
 {
-  "name": "Saley",
-  "version": "1.0.0",
-  "description": "This extension sends you an email when your Zara item goes on sale!",
   "manifest_version": 2,
+  "name": "Saley",
+  "version": "0.0.0.1",
+  "description": "This extension sends you an email when your online shopping item goes on sale!",
   "icons":{"512":"logo.png"},
 
-  "background": {"scripts":["background.js"],
-    "persistent":false},
+  "background": {
+    "persistent":false,
+    "scripts": ["background.js"]
 
-  "page_action":{
+  },
+
+  "page_action": {
     "default_icon":"logo.png",
     "default_title":"Saley",
     "default_popup": "popup.html"
   },
 
   "permissions":[
-    "tabs",
-    "*://www.zara.com/*",
+    "*://www.zara.com/es*",
+    "*://www.zara.com/ru*",
+    "*://www.zara.com/fr*",
+    "*://www.zara.com/hr*",
+    "*://www.zara.com/us*",
     "declarativeContent",
     "identity",
     "identity.email",
-    "http://127.0.0.1:3000/"
+    "http://158.101.23.186:3000/"
   ],
 
   "content_security_policy": "script-src 'self' https://unpkg.com/axios/dist/axios.min.js; object-src 'self'"

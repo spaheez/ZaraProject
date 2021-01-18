@@ -5,7 +5,8 @@ import {Request, Response} from "express";
 import * as bodyParser from "body-parser";
 import {Item} from "./entity/Item";
 import {Email} from "./entity/Email";
-import {scrapeZara} from "./scraper";
+import {getDomain, scrape} from "./scraper";
+import {Website} from "./scraper";
 
 let cron = require('node-cron');
 const nodemailer = require('nodemailer');
@@ -22,14 +23,16 @@ createConnection({"type": "mysql",
     "entities": ["src/entity/**/*.ts"]
 }).then(async connection => {
     const itemRepository = connection.getRepository(Item);
-    const emailRepository = connection.getRepository(Email)
+    const emailRepository = connection.getRepository(Email);
 
-    const save = async (price: number, url: string, emailAddress: string) => {
+    const save = async (price: number, url: string, emailAddress: string, website: Website) => {
+
         let existingItem = await itemRepository.findOne({url: url});
         if (existingItem === undefined) {
             const item = new Item();
             item.price = price;
             item.url = url;
+            item.website = website;
             existingItem = await itemRepository.save(item)
         }
 
@@ -66,39 +69,39 @@ createConnection({"type": "mysql",
         console.log("received request")
         const email: string = req.body.email
         const url: string = req.body.item_url
-        const firstPrice = await scrapeZara(url)
-        const items = await save(firstPrice, url, email)
+        const website: Website = getDomain(url)
+        const firstPrice = await scrape(url, website)
+        const items = await save(firstPrice, url, email, website)
         res.send(items);
-
     })
 
 
     cron.schedule('*/20 * * * * *', async () => {
         console.log("running cron")
-        const itemSet = await itemRepository.find({ select: ["id", "url", "price"], relations: ["emails"] });
+        const itemSet = await itemRepository.find({ select: ["id", "url", "price", "website"], relations: ["emails"] });
 
         for (let i=0; i < itemSet.length; i++) {
             const item = itemSet[i];
             let itemUrl = item.url;
-            let str = "Zara item"
+            let str = "click here"
             let result = str.link(itemUrl)
 
             let oldPrice = item.price;
-            // let newPrice = await scrapeZara(itemUrl);
-            let newPrice = 1
+            let domain = item.website;
+            let newPrice = await scrape(itemUrl, domain);
             let userEmails = item.emails;
 
             if (newPrice < oldPrice) {
                 console.log(`${item.url} is on sale`)
                 let transport = nodemailer.createTransport({
-                    service: 'gmail',
+                    service: process.env.NODEMAILER_SERVICE,
                     auth: {
-                        user: 'saley.extension@gmail.com',
-                        pass: 'Saleyextension1'
+                        user: process.env.NODEMAILER_USER,
+                        pass: process.env.NODEMAILER_PASS
                     }
                 });
                 const message = {
-                    from: 'marta.spahija@gmail.com',
+                    from: process.env.NODEMAILER_USER,
                     to: userEmails,
                     subject: 'Zara item went on sale!',
                     html: '<h1> Your Zara item is on sale! </h1><p> The item you were tracking just went on sale! Click on the link to access it: '+result+' </p>'
@@ -121,7 +124,3 @@ createConnection({"type": "mysql",
 
     app.listen(3000);
 })
-
-
-
-
