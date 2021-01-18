@@ -1,28 +1,3 @@
-// const puppeteer = require('puppeteer');
-//
-// export async function scrapeZara(url) {
-//     const browser = await puppeteer.launch();
-//     const page = await browser.newPage();
-//     await page.goto(url);
-//
-//     let price = await page.evaluate(() => {
-//
-//         let str = document.querySelector('span[class="main-price"]').textContent;
-//         let match = /\d+(,\d+)?/.exec(str);
-//         let number;
-//         if (match) {
-//             number = Number(match[0].replace(',', '.'));
-//             console.log(number);
-//         } else console.log("didnt find anything.");
-//
-//     });
-//
-//     console.log(price);
-//
-//     browser.close();
-//
-// }
-
 const puppeteer = require('puppeteer');
 
 export async function scrapeZara(url) {

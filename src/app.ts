@@ -84,8 +84,7 @@ createConnection({"type": "mysql",
             let result = str.link(itemUrl)
 
             let oldPrice = item.price;
-            // let newPrice = await scrapeZara(itemUrl);
-            let newPrice = 1
+            let newPrice = await scrapeZara(itemUrl);
             let userEmails = item.emails;
 
             if (newPrice < oldPrice) {
