@@ -1,5 +1,6 @@
 import {Entity, Column, PrimaryGeneratedColumn, ManyToMany, JoinTable} from "typeorm";
 import {Email} from "./Email"
+import {Website} from "../scraper";
 
 @Entity()
 export class Item{
@@ -12,6 +13,12 @@ export class Item{
 
     @Column("text")
     url: string;
+
+    @Column({
+        type: "enum",
+        enum: Website
+    })
+    website: Website;
 
     @ManyToMany(type => Email, email => email.items)
     @JoinTable()

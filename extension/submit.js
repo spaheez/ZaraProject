@@ -17,7 +17,7 @@ function submitData() {
                 item_url: item_url
             }
 
-            fetch("http://127.0.0.1:3000", {
+            fetch("http://158.101.23.186:3000/", {
                 method: "POST",
                 body: JSON.stringify(data),
                 headers: {"Content-type": "application/json; charset=UTF-8"},
@@ -32,7 +32,6 @@ function submitData() {
 
 const button = document.getElementById("myButton");
 button.addEventListener("click", submitData);
-
 
 
 
