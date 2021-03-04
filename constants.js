@@ -1,1 +1,0 @@
-export const ZARA_HOSTNAME = "zara.com";

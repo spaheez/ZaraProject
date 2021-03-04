@@ -1,4 +1,4 @@
-import {ZARA_HOSTNAME} from '/home/marta/IdeaProjects/ZaraProject/constants.js'
+const ZARA_HOSTNAME = "zara.com";
 
 chrome.runtime.onInstalled.addListener(function() {
     chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {

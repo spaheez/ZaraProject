@@ -5,7 +5,7 @@ function submitData() {
 
         chrome.identity.getProfileUserInfo(function (userInfo) {
             const email = userInfo.email
-            // chrome.extension.getBackgroundPage().console.log(email);
+
             if (email === "") {
                 chrome.tabs.getSelected(null, _ => alert("You are not logged in to Chrome. " +
                     "Please log in before submitting your item to Saley."))
@@ -17,7 +17,7 @@ function submitData() {
                 item_url: item_url
             }
 
-            fetch("http://158.101.23.186:3000/", {
+            fetch("//http://158.101.23.186:3000/", {
                 method: "POST",
                 body: JSON.stringify(data),
                 headers: {"Content-type": "application/json; charset=UTF-8"},
@@ -29,9 +29,5 @@ function submitData() {
     })
 }
 
-
 const button = document.getElementById("myButton");
 button.addEventListener("click", submitData);
-
-
-

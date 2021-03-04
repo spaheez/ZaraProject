@@ -1,5 +1,5 @@
 const puppeteer = require('puppeteer');
-import {ZARA_HOSTNAME} from '/home/marta/IdeaProjects/ZaraProject/constants.js'
+const ZARA_HOSTNAME = "zara.com";
 
 export enum Website {
     SPAIN,
@@ -106,5 +106,3 @@ export async function scrape(url: string, website: Website) {
     return getPriceUsingXPaths(xpathsByCountryWebsite);
 
 }
-
-

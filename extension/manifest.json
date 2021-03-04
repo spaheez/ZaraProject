@@ -6,8 +6,8 @@
   "icons":{"512":"logo.png"},
 
   "background": {
-    "scripts":["background.js"],
-    "persistent":false
+    "persistent":false,
+    "scripts": ["background.js"]
   },
 
   "page_action": {
@@ -26,9 +26,8 @@
     "declarativeContent",
     "identity",
     "identity.email",
-    "http://158.101.23.186:3000/"
+    "//http://158.101.23.186:3000/"
   ],
 
   "content_security_policy": "script-src 'self' https://unpkg.com/axios/dist/axios.min.js; object-src 'self'"
 }
-

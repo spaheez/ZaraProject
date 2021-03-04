@@ -124,7 +124,3 @@ createConnection({"type": "mysql",
 
     app.listen(3000);
 })
-
-
-
-
