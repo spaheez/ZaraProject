@@ -17,7 +17,6 @@
   },
 
   "permissions":[
-    "tabs",
     "*://www.zara.com/es*",
     "*://www.zara.com/ru*",
     "*://www.zara.com/fr*",
@@ -26,7 +25,7 @@
     "declarativeContent",
     "identity",
     "identity.email",
-    "//http://158.101.23.186:3000/"
+    "http://158.101.23.186:3000/"
   ],
 
   "content_security_policy": "script-src 'self' https://unpkg.com/axios/dist/axios.min.js; object-src 'self'"
